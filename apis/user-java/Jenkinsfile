@@ -20,7 +20,6 @@ pipeline {
                 dir(WorkDir) {
                     sh 'pwd'
                     sh 'sudo docker build -t $ImgName:$ImgTag .'
-                    // One or more steps need to be included within the steps block.
                 }
             }
         }
@@ -31,7 +30,7 @@ pipeline {
                 environment name: 'upload image', value: '1'
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'willido_dockerhub', passwordVariable: 'dockerPwd', usernameVariable: 'dockerUsr')]) {
+                withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
                     echo 'Dockerhub Login'
                     sh 'sudo docker login -u $dockerUsr -p $dockerPwd'
                     sh "sudo docker push ${ImgName}:${params.ImgTag}"
