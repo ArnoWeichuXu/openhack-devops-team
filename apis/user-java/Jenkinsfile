@@ -21,9 +21,9 @@ pipeline {
 
     stages {
         stage('Testing Types of Ref'){
-            echo 'Test'
-            echo '$Test'
-            echo '${Test}'
+            sh 'echo 'Test''
+            sh 'echo '$Test''
+            sh 'echo '${Test}''
         }
         stage('Build Docker Image') {
             steps {
