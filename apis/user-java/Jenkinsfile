@@ -29,10 +29,9 @@ pipeline {
                 environment name: 'upload image', value: '1'
             }
             steps {
+                echo 'test'
                 // One or more steps need to be included within the steps block.
             }
-
-
         }
     }
 }
