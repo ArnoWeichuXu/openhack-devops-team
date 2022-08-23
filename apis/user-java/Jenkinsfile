@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent node3
 
     environment {
     WorkDir = "apis/user-java"
@@ -33,7 +33,7 @@ pipeline {
 
         stage('Upload Docker Image') {
             when {
-                environment name: 'upload image', value: 'True'
+  		        expression {return params.blUploadImg}
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
