@@ -22,9 +22,9 @@ pipeline {
     stages {
         stage('Testing Types of Ref'){
             steps {
-                sh 'echo Test'
-                sh 'echo $Test'
-                sh 'echo ${Test}'
+                echo 'Test'
+                echo '$Test'
+                echo '${Test}'
             }
         }
         stage('Build Docker Image') {
