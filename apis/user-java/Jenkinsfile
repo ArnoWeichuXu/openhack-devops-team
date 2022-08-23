@@ -16,21 +16,26 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
+                echo 'Building Docker Image $ImgName:$ImgTag ...'
                 dir('WorkDir') {
-                    echo 'Building Docker Image $ImgName:$ImgTag ...'
+                    sh 'pwd'
                     sh 'sudo docker build -t $ImgName:$ImgTag .'
                     // One or more steps need to be included within the steps block.
                 }
             }
         }
 
-        stage('Upload Image') {
+
+        stage('Upload Docker Image') {
             when {
                 environment name: 'upload image', value: '1'
             }
             steps {
-                echo 'test'
-                // One or more steps need to be included within the steps block.
+                withCredentials([usernamePassword(credentialsId: 'willido_dockerhub', passwordVariable: 'dockerPwd', usernameVariable: 'dockerUsr')]) {
+                    echo 'Dockerhub Login'
+                    sh 'sudo docker login -u $dockerUsr -p $dockerPwd'
+                    sh "sudo docker push ${ImgName}:${params.ImgTag}"
+                }
             }
         }
     }
