@@ -5,6 +5,7 @@ pipeline {
     WorkDir = "apis/user-java"
     ImgName = "arnoxuweichu/user-java"
     ImgTag = "${params.ImgTag}"
+    Test = "ABC"
     }
 
     parameters {
@@ -14,6 +15,11 @@ pipeline {
     }
 
     stages {
+        stage('Testing Types of Ref'){
+            echo 'Test'
+            echo '$Test'
+            echo '${Test}'
+        }
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker Image $ImgName:$ImgTag ...'
@@ -27,7 +33,7 @@ pipeline {
 
         stage('Upload Docker Image') {
             when {
-                environment name: 'upload image', value: '1'
+                environment name: 'upload image', value: 'True'
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
