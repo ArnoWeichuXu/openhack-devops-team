@@ -1,41 +1,42 @@
 pipeline {
-    agent {
-        label 'node3'
+    agent any
+
+    environment {
+    WorkDir = "apis/user-java"
+    ImgName = "arnoxuweichu/user-java"
+    ImgTag = "${params.ImgTag}"
     }
 
     parameters {
-  	booleanParam defaultValue: true, description: 'True:  upload image (default); False: will not upload ', name: 'blUploadImg'
-  	string defaultValue: '1.0', name: 'ImgTag', trim: true
-    }
-
-    environment {
-      ImgName = "willido/user-java"
-      ImgTag = "${params.ImgTag}"
-      WorkDir = "apis/user-java"
+    booleanParam defaultValue: true, description: '''True: upload image
+    False: do not upload image''', name: 'upload image'
+    string defaultValue: '1.0', description: 'Set default image tag to 1.0', name: 'ImgTag', trim: true
     }
 
     stages {
         stage('Build Docker Image') {
             steps {
-                echo 'Building docker image'
+                echo 'Building Docker Image $ImgName:$ImgTag ...'
                 dir(WorkDir) {
-                	sh 'pwd'
-                	sh 'sudo docker build -t $ImgName:$ImgTag .'
-		}
-            }
-        }
-	stage('Upload Docker Image') {
-	    when {
-  		expression {return params.blUploadImg}
-	    }
-	    steps {
-                withCredentials([usernamePassword(credentialsId: 'willido_dockerhub', passwordVariable: 'dockerPwd', usernameVariable: 'dockerUsr')]) {
-                    // some block
-		    echo 'Dockerhub Login'
-                    sh 'sudo docker login -u $dockerUsr -p $dockerPwd'
-		    sh "sudo docker push ${ImgName}:${params.ImgTag}"
+                    sh 'pwd'
+                    sh 'sudo docker build -t $ImgName:$ImgTag .'
+                    // One or more steps need to be included within the steps block.
                 }
             }
-	}
+        }
+
+
+        stage('Upload Docker Image') {
+            when {
+                environment name: 'upload image', value: '1'
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'willido_dockerhub', passwordVariable: 'dockerPwd', usernameVariable: 'dockerUsr')]) {
+                    echo 'Dockerhub Login'
+                    sh 'sudo docker login -u $dockerUsr -p $dockerPwd'
+                    sh "sudo docker push ${ImgName}:${params.ImgTag}"
+                }
+            }
+        }
     }
 }
