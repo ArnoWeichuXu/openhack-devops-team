@@ -14,8 +14,7 @@ pipeline {
     }
 
     parameters {
-    booleanParam defaultValue: true, description: '''True: upload image
-    False: do not upload image''', name: 'upload image'
+    booleanParam defaultValue: true, description: '''True: upload image; False: do not upload image''', name: 'blUploadImage'
     string defaultValue: '1.0', description: 'Set default image tag to 1.0', name: 'ImgTag', trim: true
     }
 
@@ -39,7 +38,7 @@ pipeline {
 
         stage('Upload Docker Image') {
             when {
-  		        expression {return params.blUploadImg}
+  		        expression {return params.blUploadImage}
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
