@@ -1,0 +1,38 @@
+pipeline {
+    agent none
+
+    environment {
+    WorkDir = "apis/user-java"
+    ImgName = "arnoxuweichu/user-java"
+    ImgTag = "${params.ImgTag}"
+    }
+
+    parameters {
+    booleanParam defaultValue: true, description: '''True: upload image
+    False: do not upload image''', name: 'upload image'
+    string defaultValue: '1.0', description: 'Set default image tag to 1.0', name: 'ImgTag', trim: true
+    }
+
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                dir('WorkDir') {
+                    echo 'Building Docker Image $ImgName:$ImgTag ...'
+                    sh 'sudo docker build -t $ImgName:$ImgTag .'
+                    // One or more steps need to be included within the steps block.
+                }
+            }
+        }
+
+        stage('Upload Image') {
+            when {
+                environment name: 'upload image', value: '1'
+            }
+            steps {
+                // One or more steps need to be included within the steps block.
+            }
+
+
+        }
+    }
+}
