@@ -27,8 +27,8 @@ pipeline {
             }
             //environment {GOCACHE = ""}           
             steps {
-                sh 'cd /usr/local/bin'
-                sh 'pwd'
+                sh 'go version'
+                sh 'go env'
                 /*dir(WorkDir) {
                 sh '/usr/local/go/bin/go get -d'
                 sh '/usr/local/go/bin/go build -o main .'
