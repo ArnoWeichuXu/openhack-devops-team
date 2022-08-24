@@ -8,7 +8,7 @@ pipeline {
 
     environment {
     WorkDir = "apis/poi"
-    //ReportDir = "apis/poi/reports"
+    TestUnitDir = "apis/poi/tests/UnitTests"
     ImgName = "arnoxuweichu/poi"
     ImgTag = "${params.ImgTag}"
     }
@@ -29,15 +29,13 @@ pipeline {
                 DOTNET_CLI_HOME = "/tmp/DOTNET_CLI_HOME"
             }
             steps {
-                echo "Running .Net test"
+                echo "Running .Net UnitTests... IntegrationTests will be skipped due to NO databased available"
                 dir(WorkDir) {
                     sh 'dotnet build .'
+                }
+                dir(TestUnitDir){
                     sh 'dotnet test .'
                 }
-                /*echo "Test report is shown below:"
-                dir(ReportDir) {
-                    sh 'cat userprofile-report.xml'
-                }*/
             }
         }
 
