@@ -19,7 +19,7 @@ pipeline {
     }
 
     stages { 
-        stage('Test') {
+        stage('mvn Test') {
             agent {
                 docker { 
                     image 'maven:3.8.6-openjdk-11' 
@@ -28,13 +28,14 @@ pipeline {
             steps {
                 dir(WorkDir) {
                     sh 'mvn -f pom.xml package'
+                    //sh 'mvn clean install'
                     sh 'mvn test'
                 }
 
             }
         }
 
-        /*stage('Build Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 echo "Building Docker Image $ImgName:$ImgTag ..."
                 dir(WorkDir) {
@@ -71,6 +72,6 @@ pipeline {
             echo "Cleaning up workspace and docker images..."
             cleanWs()
             sh 'sudo docker rmi $ImgName:$ImgTag'
-        }*/
+        }
     }
 }
