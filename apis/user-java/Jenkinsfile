@@ -25,7 +25,7 @@ pipeline {
                     image 'maven:3.6.3-openjdk-11' 
                 }
             }
-            environment {}
+            //environment {}
             steps {
                 echo "Running maven test"
                 dir(WorkDir) {
