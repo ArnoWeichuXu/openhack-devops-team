@@ -19,7 +19,7 @@ pipeline {
     }
 
     stages { 
-        stage('Npm Test') {
+        stage('npm Test') {
             agent {
                 docker { 
                     image 'node:12-alpine' 

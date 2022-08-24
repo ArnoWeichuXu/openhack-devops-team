@@ -1,16 +1,16 @@
 pipeline {
     agent {
-    label {
-        label 'node3'
-        retries 3
-    }
+        label {
+            label 'node3'
+            retries 3
+        }
     }
 
     environment {
     WorkDir = "apis/user-java"
+    //ReportDir = "apis/userprofile/reports"
     ImgName = "arnoxuweichu/user-java"
     ImgTag = "${params.ImgTag}"
-    Test = "ABC"
     }
 
     parameters {
@@ -18,16 +18,40 @@ pipeline {
     string defaultValue: '1.0', description: 'Set default image tag to 1.0', name: 'ImgTag', trim: true
     }
 
-    stages {   
-        stage('Build Docker Image') {
+    stages { 
+        stage('Test') {
+            agent {
+                docker { 
+                    image 'maven:3.6.3-openjdk-11' 
+                }
+            }
+            environment {}
             steps {
-                echo 'Building Docker Image $ImgName:$ImgTag ...'
+                echo "Running maven test"
                 dir(WorkDir) {
-                    sh 'pwd'
+                    sh 'mvn clean install'
+                    sh 'mvn test'
+                }
+
+            }
+        }
+
+        /*stage('Build Docker Image') {
+            steps {
+                echo "Building Docker Image $ImgName:$ImgTag ..."
+                dir(WorkDir) {
                     sh 'sudo docker build -t $ImgName:$ImgTag .'
                 }
             }
         }
+
+        stage('Canary') {
+            steps {
+                timeout(1) {
+                    input message: 'Do you want to upload image?', ok: 'Upload Image'
+                }
+            }
+        } 
 
         stage('Upload Docker Image') {
             when {
@@ -35,9 +59,10 @@ pipeline {
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
-                    echo 'Dockerhub Login'
+                    echo "Logging in Dockerhub ..."
                     sh 'sudo docker login -u $DockerHubUsr -p $DockerHubPwd'
-                    sh "sudo docker push ${ImgName}:${params.ImgTag}"
+                    echo "Uploading Docker Image $ImgName:$ImgTag ..."
+                    sh 'sudo docker push $ImgName:$ImgTag'
                 }
             }
         }
@@ -45,8 +70,9 @@ pipeline {
 
     post {
         always {
+            echo "Cleaning up workspace and docker images..."
             cleanWs()
-            sh 'docker images -qa | xargs docker rmi -f'
-        }
+            sh 'sudo docker rmi $ImgName:$ImgTag'
+        }*/
     }
 }
