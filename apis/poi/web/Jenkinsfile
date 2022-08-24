@@ -1,0 +1,77 @@
+pipeline {
+    agent {
+        label {
+            label 'node3'
+            retries 3
+        }
+    }
+
+    environment {
+    WorkDir = "apis/poi"
+    //ReportDir = "apis/poi/reports"
+    ImgName = "arnoxuweichu/poi"
+    ImgTag = "${params.ImgTag}"
+    }
+
+    parameters {
+    booleanParam defaultValue: true, description: '''True: upload image; False: do not upload image''', name: 'blUploadImage'
+    string defaultValue: '1.0', description: 'Set default image tag to 1.0', name: 'ImgTag', trim: true
+    }
+
+    stages { 
+        stage('.Net Test') {
+            agent {
+                docker { 
+                    image 'mcr.microsoft.com/dotnet/core/sdk:3.1' 
+                }
+            }
+            environment {
+                DOTNET_CLI_HOME = "/tmp/DOTNET_CLI_HOME"
+            }
+            steps {
+                echo "Running .Net test"
+                dir(WorkDir) {
+                    sh 'dotnet build .'
+                    sh 'dotnet test .'
+                }
+                /*echo "Test report is shown below:"
+                dir(ReportDir) {
+                    sh 'cat userprofile-report.xml'
+                }*/
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker Image $ImgName:$ImgTag ..."
+                dir(WorkDir) {
+                    sh 'pwd'
+                    sh 'sudo docker build -t $ImgName:$ImgTag .'
+                }
+            }
+        }
+
+        stage('Upload Docker Image') {
+            when {
+  		        expression {return params.blUploadImage}
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
+                    echo "Logging in Dockerhub ..."
+                    sh 'sudo docker login -u $DockerHubUsr -p $DockerHubPwd'
+                    echo "Uploading Docker Image $ImgName:$ImgTag ..."
+                    sh "sudo docker push ${ImgName}:${params.ImgTag}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Cleaning up workspace and docker images..."
+            cleanWs()
+            sh 'docker images -qa | xargs docker rmi -f'
+            sh 'docker ps -a && docker images -a'
+        }
+    }
+}
