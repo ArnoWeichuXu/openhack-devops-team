@@ -49,4 +49,11 @@ pipeline {
             }
         }
     }
+    
+    post {
+        always {
+            cleanWs deleteDirs: true
+            sh 'docker images -qa | xargs docker rmi -f'
+    }
+}
 }
