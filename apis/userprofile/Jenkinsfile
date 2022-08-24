@@ -33,8 +33,9 @@ pipeline {
                     sh 'npm install'
                     sh 'npm run test'
                 }
-                dir('./report') {
+                dir('./reports') {
                     sh 'ls'
+                    // Couldn't find any 
                 }
             }
         }
