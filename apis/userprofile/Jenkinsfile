@@ -7,8 +7,9 @@ pipeline {
     }
 
     environment {
-    WorkDir = "apis/userprofile"
-    ImgName = "arnoxuweichu/userprofile"
+    WorkDir = 'apis/userprofile'
+    ReportDir = 'apis/userprofile/reports'
+    ImgName = 'arnoxuweichu/userprofile'
     ImgTag = "${params.ImgTag}"
     }
 
@@ -28,13 +29,13 @@ pipeline {
                 HOME = '.'
             }
             steps {
-                echo 'Running npm test'
+                echo "Running npm test"
                 dir(WorkDir) {
                     sh 'npm install'
                     sh 'npm run test'
                 }
-                dir('apis/userprofile/reports') {
-                    sh 'pwd'
+                echo "Test report is shown below:"
+                dir(ReportDir) {
                     sh 'cat userprofile-report.xml'
                 }
             }
@@ -42,10 +43,10 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                echo 'Building Docker Image $ImgName:$ImgTag ...'
+                echo "Building Docker Image $ImgName:$ImgTag ..."
                 dir(WorkDir) {
                     sh 'pwd'
-                    sh 'sudo docker build -t $ImgName:$ImgTag .'
+                    sh "sudo docker build -t $ImgName:$ImgTag ."
                 }
             }
         }
@@ -56,8 +57,9 @@ pipeline {
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
-                    echo 'Dockerhub Login'
-                    sh 'sudo docker login -u $DockerHubUsr -p $DockerHubPwd'
+                    echo "Logging in Dockerhub ..."
+                    sh "sudo docker login -u $DockerHubUsr -p $DockerHubPwd"
+                    echo "Uploading Docker Image $ImgName:$ImgTag ..."
                     sh "sudo docker push ${ImgName}:${params.ImgTag}"
                 }
             }
@@ -66,6 +68,7 @@ pipeline {
 
     post {
         always {
+            echo "Cleaning up workspace and docker images..."
             cleanWs()
             sh 'docker images -qa | xargs docker rmi -f'
         }
