@@ -54,6 +54,7 @@ pipeline {
     post {
         always {
             dir(WorkDir){
+                sh 'chmod 755 cleanup.sh'
                 sh './cleanup.sh'
             }
             cleanWs deleteDirs: true   
