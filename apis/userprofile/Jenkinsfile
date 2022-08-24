@@ -26,7 +26,7 @@ pipeline {
                 }
             }
             environment {
-                HOME = '.'
+                HOME = "."
             }
             steps {
                 echo "Running npm test"
@@ -50,6 +50,14 @@ pipeline {
             }
         }
 
+        stage('Canary') {
+            steps {
+                timeout(1) {
+                    input message: 'Do you want to upload image?', ok: 'Upload Image'
+                }
+            }
+        } 
+
         stage('Upload Docker Image') {
             when {
   		        expression {return params.blUploadImage}
@@ -59,7 +67,7 @@ pipeline {
                     echo "Logging in Dockerhub ..."
                     sh 'sudo docker login -u $DockerHubUsr -p $DockerHubPwd'
                     echo "Uploading Docker Image $ImgName:$ImgTag ..."
-                    sh "sudo docker push ${ImgName}:${params.ImgTag}"
+                    sh 'sudo docker push $ImgName:$ImgTag'
                 }
             }
         }
@@ -69,7 +77,7 @@ pipeline {
         always {
             echo "Cleaning up workspace and docker images..."
             cleanWs()
-            sh 'sudo docker images -qa | sudo xargs docker rmi -f'
+            sh 'sudo docker rmi $ImgName:$ImgTag'
         }
     }
 }
