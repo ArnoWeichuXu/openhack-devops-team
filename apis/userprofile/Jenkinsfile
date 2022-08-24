@@ -7,10 +7,10 @@ pipeline {
     }
 
     environment {
-    WorkDir = 'apis/userprofile'
-    ReportDir = 'apis/userprofile/reports'
-    ImgName = 'arnoxuweichu/userprofile'
-    ImgTag = '${params.ImgTag}'
+    WorkDir = "apis/userprofile"
+    ReportDir = "apis/userprofile/reports"
+    ImgName = "arnoxuweichu/userprofile"
+    ImgTag = "${params.ImgTag}"
     }
 
     parameters {
