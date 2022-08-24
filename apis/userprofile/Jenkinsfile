@@ -31,6 +31,7 @@ pipeline {
                 dir(WorkDir) {
                     sh 'npm install'
                     sh 'npm run test'
+                    sh 'cat userprofile-report.xml ./reports'
                 }
             }
         }
