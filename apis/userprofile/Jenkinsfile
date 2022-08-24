@@ -33,8 +33,6 @@ pipeline {
                     sh 'npm install'
                     sh 'npm run test'
                 }
-            }
-            steps {
                 dir('./report') {
                     sh 'cat userprofile-report.xml'
                 }
