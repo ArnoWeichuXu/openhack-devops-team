@@ -22,14 +22,12 @@ pipeline {
         stage('Test') {
             agent {
                 docker { 
-                    image 'maven:3.6.3-openjdk-11' 
+                    image 'maven:3.8.6-openjdk-11' 
                 }
             }
-            //environment {}
             steps {
-                echo "Running maven test"
                 dir(WorkDir) {
-                    sh 'mvn clean install'
+                    sh 'mvn -f pom.xml package'
                     sh 'mvn test'
                 }
 
