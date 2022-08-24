@@ -25,7 +25,9 @@ pipeline {
                     image 'golang:1.19' 
                 }
             }
-            //environment {}           
+            environment {
+                GOCACHE = "."
+            }           
             steps {
                 dir(WorkDir) {
                 sh '/usr/local/go/bin/go get -d'
