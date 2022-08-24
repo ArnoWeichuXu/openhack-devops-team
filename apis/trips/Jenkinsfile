@@ -26,7 +26,7 @@ pipeline {
                 }
             }
             environment {
-                GOCACHE = "."
+                GOCACHE = "$WorkDir"
             }           
             steps {
                 dir(WorkDir) {
