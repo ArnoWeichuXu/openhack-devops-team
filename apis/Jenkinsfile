@@ -7,10 +7,9 @@ pipeline {
     }
 
     environment {
-    WorkDir = "apis/user-java"
-    ImgName = "arnoxuweichu/user-java"
+    WorkDir = "apis/userprofile"
+    ImgName = "arnoxuweichu/userprofile"
     ImgTag = "${params.ImgTag}"
-    Test = "ABC"
     }
 
     parameters {
