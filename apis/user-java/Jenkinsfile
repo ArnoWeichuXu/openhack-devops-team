@@ -8,7 +8,6 @@ pipeline {
 
     environment {
     WorkDir = "apis/user-java"
-    //ReportDir = "apis/userprofile/reports"
     ImgName = "arnoxuweichu/user-java"
     ImgTag = "${params.ImgTag}"
     }
@@ -26,9 +25,9 @@ pipeline {
                 }
             }
             steps {
+                echo "Running mvn test ..."
                 dir(WorkDir) {
-                    sh 'mvn -f pom.xml package'
-                    //sh 'mvn clean install'
+                    sh 'mvn clean install'
                     sh 'mvn test'
                 }
 
