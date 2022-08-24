@@ -26,6 +26,9 @@ pipeline {
                 }
             }
             steps {
+                dir(WorkDir) {
+                    sh 'go run main.go'
+                }
                 echo "Running go test ..."
                 dir(TestDir) {
                     sh 'go test . -run Unit'
