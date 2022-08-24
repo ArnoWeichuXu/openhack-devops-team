@@ -39,6 +39,7 @@ pipeline {
                 echo "Running go test ..."
                 dir(TestDir) {
                     sh 'go test . -run Unit'
+                    sh 'go test ./tripsgo'
                 }
             }
         }
