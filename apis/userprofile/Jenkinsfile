@@ -10,7 +10,7 @@ pipeline {
     WorkDir = 'apis/userprofile'
     ReportDir = 'apis/userprofile/reports'
     ImgName = 'arnoxuweichu/userprofile'
-    ImgTag = "${params.ImgTag}"
+    ImgTag = '${params.ImgTag}'
     }
 
     parameters {
@@ -46,7 +46,7 @@ pipeline {
                 echo "Building Docker Image $ImgName:$ImgTag ..."
                 dir(WorkDir) {
                     sh 'pwd'
-                    sh "sudo docker build -t $ImgName:$ImgTag ."
+                    sh 'sudo docker build -t $ImgName:$ImgTag .'
                 }
             }
         }
@@ -58,9 +58,9 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
                     echo "Logging in Dockerhub ..."
-                    sh "sudo docker login -u $DockerHubUsr -p $DockerHubPwd"
+                    sh 'sudo docker login -u $DockerHubUsr -p $DockerHubPwd'
                     echo "Uploading Docker Image $ImgName:$ImgTag ..."
-                    sh "sudo docker push ${ImgName}:${params.ImgTag}"
+                    sh 'sudo docker push ${ImgName}:${params.ImgTag}'
                 }
             }
         }
