@@ -69,8 +69,7 @@ pipeline {
         always {
             echo "Cleaning up workspace and docker images..."
             cleanWs()
-            sh 'docker images -qa | xargs docker rmi -f'
-            sh 'docker ps -a && docker images -a'
+            sh 'sudo docker images -qa | sudo xargs docker rmi -f'
         }
     }
 }
