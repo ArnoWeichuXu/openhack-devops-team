@@ -31,8 +31,8 @@ pipeline {
                 sh 'go env'
                 sh 'pwd'
                 dir(WorkDir) {
-                sh '/go get -d'
-                sh '/go build -o main .'
+                sh 'sudo /go get -d'
+                sh 'sudo /go build -o main .'
                 }
                 echo "Running go test ..."
                 dir(TestDir) {
