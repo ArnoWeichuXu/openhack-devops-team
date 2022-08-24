@@ -34,7 +34,7 @@ pipeline {
                     sh 'npm run test'
                 }
                 dir('./report') {
-                    sh 'cat userprofile-report.xml'
+                    sh 'ls'
                 }
             }
         }
