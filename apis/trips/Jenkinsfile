@@ -25,12 +25,13 @@ pipeline {
                     image 'golang:1.19' 
                 }
             }
-            //environment {GOCACHE = ""}           
+            environment {
+                GOCACHE = "/tmp/"
+                }           
             steps {
                 sh 'go version'
                 sh 'go env'
                 sh 'pwd'
-                sh 'chmod -R 777 .'
                 dir(WorkDir) {
                 sh 'go get -d'
                 sh 'go build -o main .'
