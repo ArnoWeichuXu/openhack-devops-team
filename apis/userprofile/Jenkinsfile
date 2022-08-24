@@ -34,8 +34,7 @@ pipeline {
                     sh 'npm run test'
                 }
                 dir('./reports') {
-                    sh 'ls'
-                    // Couldn't find any 
+                    sh 'cat userprofile-report.xml'
                 }
             }
         }
