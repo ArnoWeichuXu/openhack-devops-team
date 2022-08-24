@@ -25,18 +25,18 @@ pipeline {
                     image 'golang:1.19' 
                 }
             }
-            environment {
-                GOCACHE = "$WorkDir"
-            }           
+            //environment {GOCACHE = ""}           
             steps {
-                dir(WorkDir) {
+                sh 'cd /usr/local/bin'
+                sh 'pwd'
+                /*dir(WorkDir) {
                 sh '/usr/local/go/bin/go get -d'
                 sh '/usr/local/go/bin/go build -o main .'
                 }
                 echo "Running go test ..."
                 dir(TestDir) {
                     sh 'go test . -run Unit'
-                }
+                }*/
 
             }
         }
