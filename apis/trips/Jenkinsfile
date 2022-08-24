@@ -26,7 +26,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'sudo chmod -R 777 /.cache'
+                sh 'chmod -R 777 /.cache'
                 dir(WorkDir) {
                     sh 'go run main.go'
                 }
