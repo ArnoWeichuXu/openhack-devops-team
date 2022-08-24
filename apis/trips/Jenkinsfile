@@ -25,12 +25,11 @@ pipeline {
                     image 'golang:1.19' 
                 }
             }
-            environment {
-            GOCACHE = "."
-            }           
+            //environment {}           
             steps {
                 dir(WorkDir) {
-                    sh 'go run main.go'
+                sh '/usr/local/go/bin/go get -d'
+                sh '/usr/local/go/bin/go build -o main .'
                 }
                 echo "Running go test ..."
                 dir(TestDir) {
