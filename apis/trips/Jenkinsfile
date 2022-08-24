@@ -8,7 +8,7 @@ pipeline {
 
     environment {
     WorkDir = "apis/trips"
-    //ReportDir = "apis/poi/reports"
+    TestDir = "apis/trips/tripsgo"
     ImgName = "arnoxuweichu/trips"
     ImgTag = "${params.ImgTag}"
     }
@@ -19,37 +19,37 @@ pipeline {
     }
 
     stages { 
-        stage('Go Test') {
+        stage('go Test') {
             agent {
                 docker { 
-                    image '' 
+                    image 'golang:1.19' 
                 }
-            }
-            environment {
-
             }
             steps {
-                echo ""
-                dir(WorkDir) {
-                    sh ''
-
+                echo "Running go test ..."
+                dir(TestDir) {
+                    sh 'go test . -run Unit'
                 }
-                /*echo "Test report is shown below:"
-                dir(ReportDir) {
-                    sh 'cat userprofile-report.xml'
-                }*/
+
             }
         }
 
-        stage('Build Docker Image') {
+        /*stage('Build Docker Image') {
             steps {
                 echo "Building Docker Image $ImgName:$ImgTag ..."
                 dir(WorkDir) {
-                    sh 'pwd'
                     sh 'sudo docker build -t $ImgName:$ImgTag .'
                 }
             }
         }
+
+        stage('Canary') {
+            steps {
+                timeout(1) {
+                    input message: 'Do you want to upload image?', ok: 'Upload Image'
+                }
+            }
+        } 
 
         stage('Upload Docker Image') {
             when {
@@ -60,7 +60,7 @@ pipeline {
                     echo "Logging in Dockerhub ..."
                     sh 'sudo docker login -u $DockerHubUsr -p $DockerHubPwd'
                     echo "Uploading Docker Image $ImgName:$ImgTag ..."
-                    sh "sudo docker push ${ImgName}:${params.ImgTag}"
+                    sh 'sudo docker push $ImgName:$ImgTag'
                 }
             }
         }
@@ -70,8 +70,7 @@ pipeline {
         always {
             echo "Cleaning up workspace and docker images..."
             cleanWs()
-            sh 'docker images -qa | xargs docker rmi -f'
-            sh 'docker ps -a && docker images -a'
-        }
+            sh 'sudo docker rmi $ImgName:$ImgTag'
+        }*/
     }
 }
