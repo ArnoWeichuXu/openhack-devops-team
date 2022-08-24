@@ -17,7 +17,22 @@ pipeline {
     string defaultValue: '1.0', description: 'Set default image tag to 1.0', name: 'ImgTag', trim: true
     }
 
-    stages {   
+    stages { 
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:12-alpine'
+                    //args '-v'
+                }
+            }
+            steps {
+                dir(WorkDir) {
+                    sh 'npm install'
+                    sh 'npm run test'
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker Image $ImgName:$ImgTag ...'
