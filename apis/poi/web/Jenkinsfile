@@ -43,8 +43,7 @@ pipeline {
             steps {
                 echo "Building Docker Image $ImgName:$ImgTag ..."
                 dir(WorkDir) {
-                    sh 'pwd'
-                    sh 'sudo docker build -t $ImgName:$ImgTag .'
+                    sh 'sudo docker build -t $ImgName:$ImgTag ./web'
                 }
             }
         }
