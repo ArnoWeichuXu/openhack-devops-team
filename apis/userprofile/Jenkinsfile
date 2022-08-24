@@ -20,7 +20,12 @@ pipeline {
     stages { 
         stage('Test') {
             agent {
-                docker { image 'node:12-alpine' }
+                docker { 
+                    image 'node:12-alpine' 
+                }
+            }
+            environment {
+                HOME = '.'
             }
             steps {
                 dir(WorkDir) {
