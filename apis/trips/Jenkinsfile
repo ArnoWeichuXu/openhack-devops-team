@@ -29,6 +29,7 @@ pipeline {
             steps {
                 sh 'go version'
                 sh 'go env'
+                sh 'pwd'
                 /*dir(WorkDir) {
                 sh '/usr/local/go/bin/go get -d'
                 sh '/usr/local/go/bin/go build -o main .'
