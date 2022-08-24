@@ -60,7 +60,7 @@ pipeline {
                     echo "Logging in Dockerhub ..."
                     sh 'sudo docker login -u $DockerHubUsr -p $DockerHubPwd'
                     echo "Uploading Docker Image $ImgName:$ImgTag ..."
-                    sh 'sudo docker push ${ImgName}:${params.ImgTag}'
+                    sh "sudo docker push ${ImgName}:${params.ImgTag}"
                 }
             }
         }
