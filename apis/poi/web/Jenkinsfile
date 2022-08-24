@@ -51,7 +51,7 @@ pipeline {
         stage('Canary') {
             steps {
                 timeout(1) {
-                    input message: 'Do you want to upload image?', ok: 'Yes, upload.'
+                    input message: 'Do you want to upload image?', ok: 'Upload Image'
                 }
             }
         } 
@@ -75,9 +75,7 @@ pipeline {
         always {
             echo "Cleaning up workspace and docker images..."
             cleanWs()
-            //sh 'sudo docker images -qa | sudo xargs docker rmi -f'
             sh 'sudo docker rmi $ImgName:$ImgTag'
-            //sh 'sudo docker ps -a && sudo docker images -a'
         }
     }
 }
