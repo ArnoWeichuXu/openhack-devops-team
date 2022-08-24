@@ -58,7 +58,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DockerHubPwd', usernameVariable: 'DockerHubUsr')]) {
                     echo "Logging in Dockerhub ..."
-                    sh 'sudo docker login -u $DockerHubUsr -p $DockerHubPwd'
+                    sh('sudo docker login -u $DockerHubUsr -p $DockerHubPwd')
                     echo "Uploading Docker Image $ImgName:$ImgTag ..."
                     sh 'sudo docker push $ImgName:$ImgTag'
                 }
