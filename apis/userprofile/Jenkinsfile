@@ -18,7 +18,7 @@ pipeline {
     }
 
     stages { 
-        stage('Test') {
+        stage('Npm Test') {
             agent {
                 docker { 
                     image 'node:12-alpine' 
@@ -28,10 +28,15 @@ pipeline {
                 HOME = '.'
             }
             steps {
+                echo 'Running npm test'
                 dir(WorkDir) {
                     sh 'npm install'
                     sh 'npm run test'
-                    sh 'cat userprofile-report.xml ./reports/'
+                }
+            }
+            steps {
+                dir('./report') {
+                    sh 'cat userprofile-report.xml'
                 }
             }
         }
