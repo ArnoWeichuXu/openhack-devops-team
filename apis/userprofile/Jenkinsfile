@@ -33,7 +33,7 @@ pipeline {
                     sh 'npm install'
                     sh 'npm run test'
                 }
-                dir('./reports') {
+                dir('apis/userprofile/reports') {
                     sh 'cat userprofile-report.xml'
                 }
             }
