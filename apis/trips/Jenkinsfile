@@ -80,6 +80,6 @@ pipeline {
             echo "Cleaning up workspace and docker images..."
             cleanWs()
             sh 'sudo docker rmi $ImgName:$ImgTag'
-        }*/
+        }
     }
 }
