@@ -31,7 +31,6 @@ pipeline {
             steps {
                 sh 'go version'
                 sh 'go env'
-                sh 'pwd'
                 dir(WorkDir) {
                 sh 'go get -d'
                 sh 'go build -o main .'
@@ -39,12 +38,12 @@ pipeline {
                 echo "Running go test ..."
                 dir(TestDir) {
                     sh 'go test . -run Unit'
-                    sh 'go test .'
+                    //sh 'go test .'
                 }
             }
         }
 
-        /*stage('Build Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 echo "Building Docker Image $ImgName:$ImgTag ..."
                 dir(WorkDir) {

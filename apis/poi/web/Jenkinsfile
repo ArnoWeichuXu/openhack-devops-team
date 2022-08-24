@@ -9,6 +9,7 @@ pipeline {
     environment {
     WorkDir = "apis/poi"
     TestUnitDir = "apis/poi/tests/UnitTests"
+    TestInteDir = "apis/poi/tests/IntegrationTests"
     ImgName = "arnoxuweichu/poi"
     ImgTag = "${params.ImgTag}"
     }
@@ -36,6 +37,9 @@ pipeline {
                 dir(TestUnitDir){
                     sh 'dotnet test .'
                 }
+                /*dir(TestInteDir){
+                    sh 'dotnet test .'
+                }*/
             }
         }
 

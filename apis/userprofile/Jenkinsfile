@@ -33,6 +33,7 @@ pipeline {
                 dir(WorkDir) {
                     sh 'npm install'
                     sh 'npm run test'
+                    sh 'npm run cover'
                 }
                 echo "Test report is shown below:"
                 dir(ReportDir) {
