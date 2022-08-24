@@ -26,6 +26,7 @@ pipeline {
                 echo '${Test}'
             }
         }
+        
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker Image $ImgName:$ImgTag ...'
@@ -53,7 +54,7 @@ pipeline {
     post {
         always {
             cleanWs deleteDirs: true
-            sh 'docker images -qa | xargs docker rmi -f'
+            sh './cleanup.sh ..'
     }
 }
 }
